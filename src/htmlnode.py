@@ -15,7 +15,7 @@ class HtmlNode:
 
 
     def to_html(self):
-        raise(NotImplementedError)
+        raise NotImplementedError("to_html methode not implemented yet")
     
 
     def props_to_html(self):
