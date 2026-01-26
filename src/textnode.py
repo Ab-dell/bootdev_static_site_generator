@@ -50,35 +50,25 @@ def text_node_to_html_node(text_node):
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
-    
 
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
-        else:
-            text_to_check_list = node.text.split(delimiter)
-            # print(f"node======={node}")
-            # print(f"nodes_to_check======={text_to_check_list}")
+            continue
 
-
-            if len(text_to_check_list) % 2 == 0:
-                raise Exception("No closing delimiter was found")
+        
+        text_to_check_list = node.text.split(delimiter)
+        if len(text_to_check_list) % 2 == 0:
+            raise Exception("No closing delimiter was found")
             
-            for i in range(len(text_to_check_list)):
-                if i % 2 == 0:
-                    new_nodes.append(TextNode(text_to_check_list[i], TextType.TEXT))
-                elif i % 2 == 1:
-                    match delimiter:
-                        case '"':
-                            new_nodes.append(TextNode(text_to_check_list[i], TextType.TEXT))
-                        case '**':
-                            new_nodes.append(TextNode(text_to_check_list[i], TextType.BOLD))
-                        case '_':
-                            new_nodes.append(TextNode(text_to_check_list[i], TextType.ITALIC))
-                        case '`':
-                            new_nodes.append(TextNode(text_to_check_list[i], TextType.CODE))
-                        case _:
-                            raise ValueError(f"invalid text type: {delimiter}")
+        for i in range(len(text_to_check_list)):
+            if text_to_check_list[i] == "":
+                continue
+            if i % 2 == 0:
+                new_nodes.append(TextNode(text_to_check_list[i], TextType.TEXT))
+            elif i % 2 == 1:
+                new_nodes.append(TextNode(text_to_check_list[i], text_type))
+                    
         
     return new_nodes
 
