@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType, text_node_to_html_node
+from textnode import TextNode, TextType, text_node_to_html_node, split_nodes_delimiter
 
 class TestTextNode(unittest.TestCase):
     def test_equal(self):
@@ -63,7 +63,60 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(html_node.props, {"src":"lot_of_images.com", "alt":"This is an image description"})
         self.assertEqual(html_node.props_to_html(), ' src="lot_of_images.com" alt="This is an image description"')
 
-    
+
+    def test_split_nodes_delimiter_code(self):
+        node = TextNode("This is text with a `code block` word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        self.assertEqual(
+            new_nodes,
+            [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.TEXT),
+            ]
+        )
+
+    def test_split_nodes_delimiter_with_multiple_delimeter(self):
+        node = TextNode("This is text with a `code block` word and another `code block` word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        self.assertEqual(
+            new_nodes,
+            [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word and another ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.TEXT)
+            ]
+        )
+
+    def test_split_nodes_delimiter_bold(self):
+        node = TextNode("This is text with a **bold block** word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+        self.assertEqual(
+            new_nodes,
+            [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("bold block", TextType.BOLD),
+            TextNode(" word", TextType.TEXT),
+            ]
+        )
+
+    def test_split_nodes_delimiter_with_italic_delimeter(self):
+        node = TextNode("This is text with a _italic block_ word and another _italic block_ word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
+        self.assertEqual(
+            new_nodes,
+            [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("italic block", TextType.ITALIC),
+            TextNode(" word and another ", TextType.TEXT),
+            TextNode("italic block", TextType.ITALIC),
+            TextNode(" word", TextType.TEXT)
+            ]
+        )
+
+
 
 
 
