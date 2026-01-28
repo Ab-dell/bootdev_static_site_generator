@@ -1,10 +1,9 @@
-from textnode import TextNode, TextType, split_nodes_delimiter
+from textnode import TextNode, TextType, split_nodes_delimiter, extract_markdown_images
 
 
 def main():
-    node = TextNode("This is text with a `code block` word", TextType.TEXT)
-    new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-    print(new_nodes)
+    text = "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and a second ![un bg de ouf](https://i.imgur.com/aaaaa.png)"
+    print(extract_markdown_images(text))
 
 
 
