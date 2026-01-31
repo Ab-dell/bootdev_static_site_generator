@@ -1,9 +1,12 @@
-from textnode import TextNode, TextType, split_nodes_delimiter, extract_markdown_images
+from textnode import *
 
 
 def main():
-    text = "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and a second ![un bg de ouf](https://i.imgur.com/aaaaa.png)"
-    print(extract_markdown_images(text))
+    old_node = TextNode(
+    "This is a text with an image ![alt text](image.jpg) and some text with another one ![alt text number 2](image_number_2.jpg) and another other one ![test3](image_test_3.jpg)",
+    TextType.TEXT,
+    )
+    print(split_nodes_images([old_node]))
 
 
 

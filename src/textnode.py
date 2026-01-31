@@ -79,6 +79,49 @@ def extract_markdown_images(text):
 
 def extract_markdown_links(text):
     return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+
+
+def split_nodes_images(old_nodes):
+    new_nodes = []
+
+    for node in old_nodes:
+        list_of_images_in_text = extract_markdown_images(node.text)
+
+        if node.text == "":
+            continue
+
+        if len(list_of_images_in_text) == 0:
+            new_nodes.append(node)
+            continue
+
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+        
+        
+        image_alt = list_of_images_in_text[0][0]
+        image_url = list_of_images_in_text[0][1]
+        image_mardown_text = f"![{image_alt}]({image_url})"
+        list_of_images_in_text.remove(list_of_images_in_text[0])
+
+        text_to_check_list = node.text.split(image_mardown_text, 1)
+
+            
+        if text_to_check_list[0] == "":
+            continue
+            
+        new_nodes.append(TextNode(text_to_check_list[0], TextType.TEXT))
+        new_nodes.append(TextNode(image_alt, TextType.IMAGES, image_url))
+
+        remainder = text_to_check_list[1]
+        if remainder != "":
+            new_nodes.extend(split_nodes_images([TextNode(text_to_check_list[1], TextType.TEXT)]))
+
+        
+    return new_nodes
+        
+    
+    
     
     
         
