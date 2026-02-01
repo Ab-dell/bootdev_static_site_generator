@@ -119,6 +119,9 @@ def split_nodes_images(old_nodes):
 
         
     return new_nodes
+
+
+
         
     
     

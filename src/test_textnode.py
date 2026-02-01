@@ -149,6 +149,50 @@ class TestTextNode(unittest.TestCase):
         )
         self.assertListEqual([("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")], matches)
 
+    def test_split_nodes_images(self):
+        old_node = TextNode(
+            "This is a text with an image ![alt text](image.jpg)",
+            TextType.TEXT,
+            )
+        self.assertListEqual(
+            [TextNode("This is a text with an image " , TextType.TEXT, None), TextNode("alt text", TextType.IMAGES, "image.jpg")],
+            split_nodes_images([old_node])
+        )
+
+
+    def test_split_nodes_images_with_multiple_images(self):
+        old_node = TextNode(
+        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+        TextType.TEXT,
+        )
+        new_nodes = split_nodes_images([old_node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.TEXT),
+                TextNode("image", TextType.IMAGES, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.TEXT),
+                TextNode(
+                    "second image", TextType.IMAGES, "https://i.imgur.com/3elNhQu.png"
+                ),
+            ],
+            new_nodes,
+        )
+
+    def test_split_nodes_images_with_an_image_and_a_link(self):
+        old_node = TextNode(
+        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and a link [to boot dev](https://www.boot.dev)",
+        TextType.TEXT,
+        )
+        new_nodes = split_nodes_images([old_node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.TEXT),
+                TextNode("image", TextType.IMAGES, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and a link [to boot dev](https://www.boot.dev)", TextType.TEXT),
+            ],
+            new_nodes,
+        )
+
 
 
 if __name__ == "__main__":
