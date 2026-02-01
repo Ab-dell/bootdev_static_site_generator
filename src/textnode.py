@@ -122,6 +122,46 @@ def split_nodes_images(old_nodes):
 
 
 
+def split_nodes_links(old_nodes):
+    new_nodes = []
+
+    for node in old_nodes:
+        list_of_images_in_text = extract_markdown_links(node.text)
+
+        if node.text == "":
+            continue
+
+        if len(list_of_images_in_text) == 0:
+            new_nodes.append(node)
+            continue
+
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+        
+        
+        link_text = list_of_images_in_text[0][0]
+        link_url = list_of_images_in_text[0][1]
+        link_mardown_text = f"[{link_text}]({link_url})"
+        list_of_images_in_text.remove(list_of_images_in_text[0])
+
+        text_to_check_list = node.text.split(link_mardown_text, 1)
+
+            
+        if text_to_check_list[0] == "":
+            continue
+            
+        new_nodes.append(TextNode(text_to_check_list[0], TextType.TEXT))
+        new_nodes.append(TextNode(link_text, TextType.LINK, link_url))
+
+        remainder = text_to_check_list[1]
+        if remainder != "":
+            new_nodes.extend(split_nodes_links([TextNode(text_to_check_list[1], TextType.TEXT)]))
+
+        
+    return new_nodes
+
+
         
     
     

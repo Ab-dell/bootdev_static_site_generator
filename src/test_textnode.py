@@ -149,6 +149,7 @@ class TestTextNode(unittest.TestCase):
         )
         self.assertListEqual([("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")], matches)
 
+
     def test_split_nodes_images(self):
         old_node = TextNode(
             "This is a text with an image ![alt text](image.jpg)",
@@ -189,6 +190,52 @@ class TestTextNode(unittest.TestCase):
                 TextNode("This is text with an ", TextType.TEXT),
                 TextNode("image", TextType.IMAGES, "https://i.imgur.com/zjjcJKZ.png"),
                 TextNode(" and a link [to boot dev](https://www.boot.dev)", TextType.TEXT),
+            ],
+            new_nodes,
+        )
+
+###################################################
+
+    def test_split_nodes_links(self):
+        old_node = TextNode(
+            "This is text with a link [to boot dev](https://www.boot.dev)",
+            TextType.TEXT,
+            )
+        self.assertListEqual(
+            [TextNode("This is text with a link " , TextType.TEXT, None), TextNode("to boot dev", TextType.LINK, "https://www.boot.dev")],
+            split_nodes_links([old_node])
+        )
+
+
+    def test_split_nodes_links_with_multiple_links(self):
+        old_node = TextNode(
+        "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+        TextType.TEXT,
+        )
+        new_nodes = split_nodes_links([old_node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with a link ", TextType.TEXT),
+                TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+                TextNode(" and ", TextType.TEXT),
+                TextNode(
+                    "to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"
+                ),
+            ],
+            new_nodes,
+        )
+
+    def test_split_nodes_links_with_a_link_and_an_image(self):
+        old_node = TextNode(
+        "This is text with a link [to boot dev](https://www.boot.dev) and an ![image](https://i.imgur.com/zjjcJKZ.png)",
+        TextType.TEXT,
+        )
+        new_nodes = split_nodes_links([old_node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with a link ", TextType.TEXT),
+                TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+                TextNode(" and an ![image](https://i.imgur.com/zjjcJKZ.png)", TextType.TEXT),
             ],
             new_nodes,
         )

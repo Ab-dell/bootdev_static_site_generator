@@ -3,10 +3,10 @@ from textnode import *
 
 def main():
     old_node = TextNode(
-    "This is a text with an image ![alt text](image.jpg) and some text with another one ![alt text number 2](image_number_2.jpg) and another other one ![test3](image_test_3.jpg)",
+    "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
     TextType.TEXT,
-    )
-    print(split_nodes_images([old_node]))
+)
+    print(split_nodes_links([old_node]))
 
 
 
