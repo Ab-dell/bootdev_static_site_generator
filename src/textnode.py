@@ -108,6 +108,7 @@ def split_nodes_images(old_nodes):
 
             
         if text_to_check_list[0] == "":
+            new_nodes.append(TextNode(image_alt, TextType.IMAGES, image_url))
             continue
             
         new_nodes.append(TextNode(text_to_check_list[0], TextType.TEXT))
@@ -126,12 +127,12 @@ def split_nodes_links(old_nodes):
     new_nodes = []
 
     for node in old_nodes:
-        list_of_images_in_text = extract_markdown_links(node.text)
+        list_of_links_in_text = extract_markdown_links(node.text)
 
         if node.text == "":
             continue
 
-        if len(list_of_images_in_text) == 0:
+        if len(list_of_links_in_text) == 0:
             new_nodes.append(node)
             continue
 
@@ -140,15 +141,16 @@ def split_nodes_links(old_nodes):
             continue
         
         
-        link_text = list_of_images_in_text[0][0]
-        link_url = list_of_images_in_text[0][1]
+        link_text = list_of_links_in_text[0][0]
+        link_url = list_of_links_in_text[0][1]
         link_mardown_text = f"[{link_text}]({link_url})"
-        list_of_images_in_text.remove(list_of_images_in_text[0])
+        list_of_links_in_text.remove(list_of_links_in_text[0])
 
         text_to_check_list = node.text.split(link_mardown_text, 1)
 
             
         if text_to_check_list[0] == "":
+            new_nodes.append(TextNode(link_text, TextType.LINK, link_url))
             continue
             
         new_nodes.append(TextNode(text_to_check_list[0], TextType.TEXT))
