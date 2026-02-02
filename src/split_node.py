@@ -117,3 +117,19 @@ def split_nodes_links(old_nodes):
 
         
     return new_nodes
+
+
+def text_to_textnodes(text):
+    text_node = [TextNode(text, TextType.TEXT)]
+
+    list_of_nodes_without_links_or_images_checked = split_nodes_delimiter(
+        split_nodes_delimiter(
+        split_nodes_delimiter(text_node,"**", TextType.BOLD),
+        "_",
+        TextType.ITALIC
+    ), "`", TextType.CODE)
+
+    list_of_nodes_with_all_but_links_checked = split_nodes_images(list_of_nodes_without_links_or_images_checked)
+    list_of_nodes_with_everything_checked = split_nodes_links(list_of_nodes_with_all_but_links_checked)
+
+    return list_of_nodes_with_everything_checked
