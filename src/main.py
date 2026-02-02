@@ -1,4 +1,5 @@
 from textnode import *
+from split_node import *
 
 
 def main():
