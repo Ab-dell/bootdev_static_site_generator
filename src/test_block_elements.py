@@ -1,5 +1,5 @@
 import unittest
-from block_elements import markdown_to_blocks
+from block_elements import *
 
 
 
@@ -71,6 +71,33 @@ This is the same paragraph on a new line
             ],
         )
 
+    def test_block_to_block_type_paragraph(self):
+         markdown = "this just a paragraph\n albeit multiline one"
+         self.assertEqual(block_to_block_type(markdown), BlockType.PARAGRAPH)
+
+    def test_block_to_block_type_code(self):
+         markdown = "```\nthis just a code block\n albeit multiline one```"
+         self.assertEqual(block_to_block_type(markdown), BlockType.CODE)
+
+    def test_block_to_block_type_quote(self):
+         markdown = "> blockquote"
+         self.assertEqual(block_to_block_type(markdown), BlockType.QUOTE)
+    
+    def test_block_to_block_type_quote_no_space(self):
+         markdown = ">blockquote"
+         self.assertEqual(block_to_block_type(markdown), BlockType.QUOTE)
+
+    def test_block_to_block_type_unordered_list_one_line(self):
+         markdown = "- an item in a list"
+         self.assertEqual(block_to_block_type(markdown), BlockType.UNORDERED_LIST)
+
+    def test_block_to_block_type_unordered_list_multiple_line(self):
+         markdown = """- an item in a list\n- another one\n- and another one """
+         self.assertEqual(block_to_block_type(markdown), BlockType.UNORDERED_LIST)
+
+    def test_block_to_block_type_ordered_list_one_line(self):
+         markdown = """1. an item in a list\n2. another one\n3. and another one """
+         self.assertEqual(block_to_block_type(markdown), BlockType.ORDERED_LIST)
 
 
 
