@@ -26,11 +26,11 @@ def markdown_to_blocks(markdown):
 
 def block_to_block_type(markdown_block):
     
-    heading_regex = r"^#{1,6}\s.+"
+    
     multiline_block_list = markdown_block.split("\n")
 
 
-    if re.match(heading_regex, markdown_block):
+    if markdown_block.startswith(("#", "##", "###", "####", "#####", "######")):
         return BlockType.HEADING
     elif markdown_block.startswith("```\n") and markdown_block.endswith("```"):
         return BlockType.CODE

@@ -1,11 +1,12 @@
 from textnode import *
 from split_node import *
 from block_elements import markdown_to_blocks
+from mardown_to_html_node import markdown_to_html_node
 
 
 def main():
     md = """
-This is **bolded** paragraph
+This is a **bolded** paragraph
 
 This is another paragraph with _italic_ text and `code` here
 This is the same paragraph on a new line
@@ -13,7 +14,7 @@ This is the same paragraph on a new line
 - This is a list
 - with items
 """
-    print(markdown_to_blocks(md))
+    print(markdown_to_html_node(md))
 
 
 
