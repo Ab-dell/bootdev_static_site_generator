@@ -50,20 +50,23 @@ def extract_title(markdown):
 def generate_page(from_path, template_path, dest_path):
     print(f"generating page from {from_path} to {dest_path} using {template_path}")
 
-    with open(f"{from_path}", "r") as src_file:
+    with open(from_path, "r") as src_file:
         src_file_content = src_file.read()
 
     html_string_from_markdown = markdown_to_html_node(src_file_content).to_html()
     title_of_page = extract_title(src_file_content)
 
-    with open(f"{template_path}", "r") as template_file:
+    with open(template_path, "r") as template_file:
         template_file_content = template_file.read()
 
-    template_file_content.replace("{{ Title }}", title_of_page)
-    template_file_content.replace("{{ Content }}", html_string_from_markdown)
+        template_file_content = template_file_content.replace("{{ Title }}", title_of_page)
+        template_file_content = template_file_content.replace("{{ Content }}", html_string_from_markdown)
 
-    if not os.path.exists(dest_path):
-        os.makedirs(os.path.dirname(dest_path))
+    if os.path.dirname(dest_path):
+        os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+
+    with open(dest_path, "w") as f:
+        f.write(template_file_content)
 
     
 
