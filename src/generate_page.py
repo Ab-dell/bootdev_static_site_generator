@@ -1,5 +1,39 @@
+import os
+import shutil
 from block_elements import markdown_to_blocks
+from markdown_to_html_node import markdown_to_html_node
 
+
+
+def copy_content(source_dir_path, destination_dir_path):
+    # source_dir_abs_path = os.path.abspath(source_dir_path)
+    # destination_dir_abs_path = os.path.abspath(destination_dir_path)
+    try:
+        if not os.path.exists(source_dir_path):
+            raise Exception("Error: The source directory does not exist")
+        
+        if os.path.exists(destination_dir_path):
+            shutil.rmtree(destination_dir_path)
+        
+        os.mkdir(destination_dir_path)
+
+        for file in os.listdir(source_dir_path):
+            current_file = os.path.join(source_dir_path, file)
+
+            if not os.path.exists(current_file):
+                print(f"Error: {current_file} is does not exist")
+                continue
+
+            if os.path.isdir(current_file):
+                copy_content(current_file, os.path.join(destination_dir_path, file))
+                continue
+
+            print(f"copiying {current_file}")
+            shutil.copy(current_file, destination_dir_path)
+
+        
+    except Exception as e:
+        return f"Error: {e}"
 
 
 def extract_title(markdown):
@@ -14,4 +48,28 @@ def extract_title(markdown):
 
 
 def generate_page(from_path, template_path, dest_path):
-    pass
+    print(f"generating page from {from_path} to {dest_path} using {template_path}")
+
+    with open(f"{from_path}", "r") as src_file:
+        src_file_content = src_file.read()
+
+    html_string_from_markdown = markdown_to_html_node(src_file_content).to_html()
+    title_of_page = extract_title(src_file_content)
+
+    with open(f"{template_path}", "r") as template_file:
+        template_file_content = template_file.read()
+
+    template_file_content.replace("{{ Title }}", title_of_page)
+    template_file_content.replace("{{ Content }}", html_string_from_markdown)
+
+    if not os.path.exists(dest_path):
+        os.makedirs(os.path.dirname(dest_path))
+
+    
+
+    
+
+    
+
+
+    

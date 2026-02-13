@@ -1,8 +1,8 @@
 from textnode import *
 from split_node import *
 from block_elements import markdown_to_blocks
-from mardown_to_html_node import markdown_to_html_node
-from copy_content import copy_content
+from markdown_to_html_node import markdown_to_html_node
+from generate_page import copy_content
 
 
 def main():
