@@ -12,7 +12,7 @@ def main():
         basepath = sys.argv[1]
 
     copy_content("static","docs")
-    generate_pages_recursive("content", "template.html", "docs")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 
 
