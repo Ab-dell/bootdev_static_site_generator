@@ -1,3 +1,4 @@
+import sys
 from textnode import *
 from split_node import *
 from block_elements import markdown_to_blocks
@@ -6,6 +7,10 @@ from generate_page import copy_content, generate_page, generate_pages_recursive
 
 
 def main():
+    basepath = "/"
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+
     copy_content("static","public")
     generate_pages_recursive("content", "template.html", "public")
 
