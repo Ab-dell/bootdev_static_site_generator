@@ -1,1 +1,1 @@
-python3 src/main.py "/Ab-dell/docs/"
+python3 src/main.py "/Ab-dell/"
